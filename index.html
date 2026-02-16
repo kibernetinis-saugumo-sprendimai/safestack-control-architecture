@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SafeStack Control Dossier — Architectural deep dive into VPN systems, encryption layers, infrastructure trust and identity boundaries.">
+<meta name="robots" content="index, follow">
+<title>SafeStack | Control Dossier</title>
+
+<style>
+:root{
+    --bg:#0e1116;
+    --text:#e8edf5;
+    --muted:#7c8796;
+    --accent:#00d4ff;
+    --line:#1c2430;
+}
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:system-ui,-apple-system,sans-serif;
+    line-height:1.7;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    min-height:100vh;
+}
+
+/* Side index */
+nav{
+    border-right:1px solid var(--line);
+    padding:40px 20px;
+    position:sticky;
+    top:0;
+    height:100vh;
+}
+
+nav h1{
+    font-size:0.9rem;
+    letter-spacing:4px;
+    font-weight:500;
+    margin-bottom:40px;
+}
+
+nav a{
+    display:block;
+    margin:14px 0;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:0.8rem;
+    letter-spacing:1px;
+}
+
+nav a:hover{
+    color:var(--accent);
+}
+
+/* Content */
+main{
+    padding:80px 10%;
+}
+
+section{
+    margin-bottom:120px;
+    max-width:900px;
+}
+
+h2{
+    font-weight:500;
+    letter-spacing:2px;
+    border-left:3px solid var(--accent);
+    padding-left:12px;
+}
+
+h3{
+    margin-top:40px;
+    font-weight:500;
+}
+
+p{
+    color:var(--muted);
+}
+
+code{
+    background:#121722;
+    padding:2px 6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<nav>
+<h1>CONTROL</h1>
+<a href="#network">Network</a>
+<a href="#encryption">Encryption</a>
+<a href="#infrastructure">Infrastructure</a>
+<a href="#application">Application</a>
+<a href="#identity">Identity</a>
+<a href="#conclusion">Conclusion</a>
+</nav>
+
+<main>
+
+<section id="network">
+<h2>Network Layer</h2>
+
+<p>
+A VPN modifies routing logic at the operating system level.
+Traffic is redirected through a virtual interface such as <code>wg0</code> or <code>tun0</code>.
+</p>
+
+<h3>Encapsulation</h3>
+<p>
+Original IP packets are encapsulated into encrypted transport frames.
+The ISP observes encrypted traffic toward a single endpoint.
+</p>
+
+<h3>Routing Control</h3>
+<p>
+The default gateway is replaced.
+Split tunneling modifies selective route tables.
+</p>
+
+<h3>DNS Resolution</h3>
+<p>
+If DNS is not routed internally, resolution leaks.
+Secure configuration ensures resolver binding to tunnel interface.
+</p>
+</section>
+
+<section id="encryption">
+<h2>Encryption Layer</h2>
+
+<p>
+Modern VPN systems use authenticated encryption with ephemeral key exchange.
+</p>
+
+<h3>WireGuard</h3>
+<p>
+Implements the Noise IK handshake pattern.
+Curve25519 for key exchange.
+ChaCha20-Poly1305 for encryption and authentication.
+</p>
+
+<h3>Session Keys</h3>
+<p>
+Ephemeral keys rotate periodically.
+Perfect Forward Secrecy prevents retrospective decryption.
+</p>
+
+<h3>Cryptographic Discipline</h3>
+<p>
+Security depends on implementation integrity, not algorithm branding.
+</p>
+</section>
+
+<section id="infrastructure">
+<h2>Infrastructure Layer</h2>
+
+<p>
+Infrastructure defines real trust boundaries.
+Encryption cannot override server compromise.
+</p>
+
+<h3>Jurisdiction</h3>
+<p>
+Legal frameworks may mandate metadata retention or disclosure.
+</p>
+
+<h3>Logging</h3>
+<p>
+“No logs” must exclude connection timestamps and IP mapping.
+Partial logging equals traceability.
+</p>
+
+<h3>Control Model</h3>
+<p>
+Self-hosted VPN increases control but increases operational responsibility.
+Commercial VPN centralizes risk.
+</p>
+</section>
+
+<section id="application">
+<h2>Application Layer</h2>
+
+<p>
+VPN does not control application behavior.
+</p>
+
+<h3>WebRTC</h3>
+<p>
+Browsers may expose local IP through peer connection APIs.
+</p>
+
+<h3>Fingerprinting</h3>
+<p>
+Canvas entropy, GPU signatures and timing patterns form probabilistic identity.
+</p>
+</section>
+
+<section id="identity">
+<h2>Identity Layer</h2>
+
+<p>
+Authentication overrides transport masking.
+</p>
+
+<h3>Accounts</h3>
+<p>
+Logging into services binds session identity to user profile.
+</p>
+
+<h3>Behavior</h3>
+<p>
+Interaction patterns generate behavioral signatures independent of IP.
+</p>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+
+<p>
+Encryption protects payload.  
+Routing obscures destination.  
+Infrastructure defines trust.  
+Applications leak entropy.  
+Identity persists above transport.
+</p>
+
+<p>
+Security is layered discipline.
+</p>
+</section>
+
+</main>
+</div>
+
+</body>
+</html>
